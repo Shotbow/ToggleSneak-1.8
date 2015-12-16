@@ -2,12 +2,12 @@ package deez.togglesneak;
 
 import java.io.File;
 
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import deez.togglesneak.proxy.CommonProxy;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -24,7 +24,7 @@ public class ToggleSneakMod
 {
 	public static final String	ModID		= "ToggleSneak";
 	public static final String	ModName		= "ToggleSneak";
-	public static final String	ModVersion	= "3.0.3";
+	public static final String	ModVersion	= "3.1.0";
 	
 	public static Configuration config					= null;
 	public static File			configFile				= null;

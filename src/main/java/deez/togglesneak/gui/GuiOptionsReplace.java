@@ -1,5 +1,7 @@
 package deez.togglesneak.gui;
 
+import java.io.IOException;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.client.gui.GuiScreen;
@@ -24,12 +26,19 @@ public class GuiOptionsReplace extends GuiOptions
 	
 	protected void actionPerformed(GuiButton buttonPressed)
 	{
-		super.actionPerformed(buttonPressed);
-		
-		if(buttonPressed.id == 9999)
+		try
 		{
-			this.mc.gameSettings.saveOptions();
-			this.mc.displayGuiScreen(new GuiTSConfig(this));
+			super.actionPerformed(buttonPressed);
+			
+			if(buttonPressed.id == 9999)
+			{
+				this.mc.gameSettings.saveOptions();
+				this.mc.displayGuiScreen(new GuiTSConfig(this));
+			}
+		}
+		catch (IOException ex)
+		{
+			;
 		}
 	}
 }

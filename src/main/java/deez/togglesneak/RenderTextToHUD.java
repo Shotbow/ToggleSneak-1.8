@@ -1,7 +1,7 @@
 package deez.togglesneak;
 
 import net.minecraft.client.Minecraft;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 public class RenderTextToHUD
@@ -18,7 +18,7 @@ public class RenderTextToHUD
     	{
     		if(ToggleSneakMod.optionShowHUDText)
     		{
-    			mc.fontRenderer.drawStringWithShadow(textForHUD, ToggleSneakMod.optionHUDTextPosX, ToggleSneakMod.optionHUDTextPosY, 0xffffff);
+    			mc.fontRendererObj.drawStringWithShadow(textForHUD, ToggleSneakMod.optionHUDTextPosX, ToggleSneakMod.optionHUDTextPosY, 0xffffff);
     		}
     	}
     }

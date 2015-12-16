@@ -35,27 +35,27 @@ public class CustomMovementInput
 
 		GameSettings settings = mc.gameSettings;
 
-		if(settings.keyBindForward.getIsKeyPressed())
+		if(settings.keyBindForward.isKeyDown())
 		{
 			++options.moveForward;
 		}
 
-		if(settings.keyBindBack.getIsKeyPressed())
+		if(settings.keyBindBack.isKeyDown())
 		{
 			--options.moveForward;
 		}
 
-		if(settings.keyBindLeft.getIsKeyPressed())
+		if(settings.keyBindLeft.isKeyDown())
 		{
 			++options.moveStrafe;
 		}
 
-		if(settings.keyBindRight.getIsKeyPressed())
+		if(settings.keyBindRight.isKeyDown())
 		{
 			--options.moveStrafe;
 		}
 
-		options.jump = settings.keyBindJump.getIsKeyPressed();
+		options.jump = settings.keyBindJump.isKeyDown();
 
 		//
 		// Sneak Toggle - Essentially the same as old ToggleSneak
@@ -65,7 +65,7 @@ public class CustomMovementInput
 		if (ToggleSneakMod.optionToggleSneak)
 		{
 			// Key Pressed
-			if (settings.keyBindSneak.getIsKeyPressed() && !this.handledSneakPress)
+			if (settings.keyBindSneak.isKeyDown() && !this.handledSneakPress)
 	        {
 				// Descend if we are flying, note if we were riding (so we can unsneak once dismounted)
 	        	if(thisPlayer.isRiding() || thisPlayer.capabilities.isFlying)
@@ -83,7 +83,7 @@ public class CustomMovementInput
 	        }
 			
 			// Key Released
-	        if (!settings.keyBindSneak.getIsKeyPressed() && this.handledSneakPress)
+	        if (!settings.keyBindSneak.isKeyDown() && this.handledSneakPress)
 	        {
 	        	// If we are flying or riding, stop sneaking after descent/dismount.
 	        	if(thisPlayer.capabilities.isFlying || this.wasRiding)
@@ -102,7 +102,7 @@ public class CustomMovementInput
 		}
 		else
 		{
-			options.sneak = settings.keyBindSneak.getIsKeyPressed();
+			options.sneak = settings.keyBindSneak.isKeyDown();
 		}
 
 		if(options.sneak)
@@ -123,7 +123,7 @@ public class CustomMovementInput
 		canDoubleTap = ToggleSneakMod.optionDoubleTap;
 		
 		// Key Pressed
-		if((canSprint || isDisabled) && settings.keyBindSprint.getIsKeyPressed() && !this.handledSprintPress)
+		if((canSprint || isDisabled) && settings.keyBindSprint.isKeyDown() && !this.handledSprintPress)
 		{
 			if(!isDisabled)
 			{
@@ -135,7 +135,7 @@ public class CustomMovementInput
 		}
 		
 		// Key Released
-		if((canSprint || isDisabled) && !settings.keyBindSprint.getIsKeyPressed() && this.handledSprintPress)
+		if((canSprint || isDisabled) && !settings.keyBindSprint.isKeyDown() && this.handledSprintPress)
 		{
 			// Was key held for longer than 300ms?  If so, mark it so we can resume vanilla behavior
 			if(System.currentTimeMillis() - this.lastSprintPressed > 300L)
@@ -165,8 +165,8 @@ public class CustomMovementInput
 			
 			boolean isFlying = thisPlayer.capabilities.isFlying;
 			boolean isRiding = thisPlayer.isRiding();
-			boolean isHoldingSneak = settings.keyBindSneak.getIsKeyPressed();
-			boolean isHoldingSprint = settings.keyBindSprint.getIsKeyPressed();
+			boolean isHoldingSneak = settings.keyBindSneak.isKeyDown();
+			boolean isHoldingSprint = settings.keyBindSprint.isKeyDown();
 			
 			if(isFlying)
 			{

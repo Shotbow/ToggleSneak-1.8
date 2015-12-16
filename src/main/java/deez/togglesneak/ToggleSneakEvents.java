@@ -4,8 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiOptions;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import deez.togglesneak.gui.GuiOptionsReplace;
 
 public class ToggleSneakEvents

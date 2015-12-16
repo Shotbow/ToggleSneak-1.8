@@ -1,7 +1,24 @@
 ToggleSneak Changelog
 
 +------------------------------------------------------------------------------+
-|                           Version 3.1 - 06/20/2014                           |
+|                         Version 3.1.0 - 01-23-2015                           |
++------------------------------------------------------------------------------+
+- Updated to Minecraft 1.8, Forge 11.14.0.1290 and PlayerAPI-1.8-1.0
+
+
+
++------------------------------------------------------------------------------+
+|                         Version 3.0.5 - 12/09/2014                           |
++------------------------------------------------------------------------------+
+- Updated to Minecraft 1.7.10, Forge 10.13.2.1240 and PlayerAPI-1.7.10-1.0
+- Fixed a crash while setting Fly Boost Amount in certain localizations
+- Re-Positioned the ToggleSneak button on the Options screen to the left column
+
+
+
++------------------------------------------------------------------------------+
+
+|                         Version 3.0.1 - 06/17/2014                           |
 +------------------------------------------------------------------------------+
 - Fixed a bug that prevented proper saving and loading of HUD Position Settings
 

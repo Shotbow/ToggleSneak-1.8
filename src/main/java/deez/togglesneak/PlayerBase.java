@@ -2,7 +2,7 @@ package deez.togglesneak;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.GameSettings;
 
@@ -47,6 +47,7 @@ public class PlayerBase extends ClientPlayerBase
 			this.playerAPI.setSprintToggleTimerField(this.playerAPI.getSprintToggleTimerField() - 1);
 		}
 
+		/*
 		if(this.mc.playerController.enableEverythingIsScrewedUpMode())
 		{
 			this.player.posX = this.player.posZ = 0.5D;
@@ -58,6 +59,7 @@ public class PlayerBase extends ClientPlayerBase
 		}
 		else
 		{
+		*/
 			this.player.prevTimeInPortal = this.player.timeInPortal;
 			if(this.playerAPI.getInPortalField())
 			{
@@ -68,7 +70,7 @@ public class PlayerBase extends ClientPlayerBase
 
 				if(this.player.timeInPortal == 0.0F)
 				{
-					this.mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("portal.trigger"), this.player.getRNG().nextFloat() * 0.4F + 0.8F));
+					this.mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("portal.trigger"), this.player.getRNG().nextFloat() * 0.4F + 0.8F));
 				}
 
 				this.player.timeInPortal += 0.0125F;
@@ -119,16 +121,20 @@ public class PlayerBase extends ClientPlayerBase
 				this.player.movementInput.moveForward *= 0.2F;
 				this.playerAPI.setSprintToggleTimerField(0);
 			}
+			
+			/* TODO: removed in vanilla 1.8 - investigate
 
 			if(this.player.movementInput.sneak && this.player.ySize < 0.2F)
 			{
 				this.player.ySize = 0.2F;
 			}
+			
+			*/
 
-			this.playerAPI.localPushOutOfBlocks(this.player.posX - (double)this.player.width * 0.35D, this.player.boundingBox.minY + 0.5D, this.player.posZ + (double)this.player.width * 0.35D);
-			this.playerAPI.localPushOutOfBlocks(this.player.posX - (double)this.player.width * 0.35D, this.player.boundingBox.minY + 0.5D, this.player.posZ - (double)this.player.width * 0.35D);
-			this.playerAPI.localPushOutOfBlocks(this.player.posX + (double)this.player.width * 0.35D, this.player.boundingBox.minY + 0.5D, this.player.posZ - (double)this.player.width * 0.35D);
-			this.playerAPI.localPushOutOfBlocks(this.player.posX + (double)this.player.width * 0.35D, this.player.boundingBox.minY + 0.5D, this.player.posZ + (double)this.player.width * 0.35D);
+			this.playerAPI.localPushOutOfBlocks(this.player.posX - (double)this.player.width * 0.35D, this.player.getEntityBoundingBox().minY + 0.5D, this.player.posZ + (double)this.player.width * 0.35D);
+			this.playerAPI.localPushOutOfBlocks(this.player.posX - (double)this.player.width * 0.35D, this.player.getEntityBoundingBox().minY + 0.5D, this.player.posZ - (double)this.player.width * 0.35D);
+			this.playerAPI.localPushOutOfBlocks(this.player.posX + (double)this.player.width * 0.35D, this.player.getEntityBoundingBox().minY + 0.5D, this.player.posZ - (double)this.player.width * 0.35D);
+			this.playerAPI.localPushOutOfBlocks(this.player.posX + (double)this.player.width * 0.35D, this.player.getEntityBoundingBox().minY + 0.5D, this.player.posZ + (double)this.player.width * 0.35D);
 			boolean enoughHunger = (float)this.player.getFoodStats().getFoodLevel() > 6.0F || this.player.capabilities.isFlying;
 			
 			/*
@@ -151,7 +157,7 @@ public class PlayerBase extends ClientPlayerBase
 			{
 	            if(ToggleSneakMod.optionDoubleTap && this.player.onGround && !isMovingForward && this.player.movementInput.moveForward >= minSpeed && !this.player.isSprinting() && enoughHunger && !this.player.isUsingItem() && !this.player.isPotionActive(Potion.blindness))
 	            {
-	               if(this.playerAPI.getSprintToggleTimerField() <= 0 && !this.settings.keyBindSprint.getIsKeyPressed())
+	               if(this.playerAPI.getSprintToggleTimerField() <= 0 && !this.settings.keyBindSprint.isKeyDown())
 	               {
 	                  this.playerAPI.setSprintToggleTimerField(7);
 	               }
@@ -162,7 +168,7 @@ public class PlayerBase extends ClientPlayerBase
 	               }
 	            }
 
-	            if(!this.player.isSprinting() && this.player.movementInput.moveForward >= minSpeed && enoughHunger && !this.player.isUsingItem() && !this.player.isPotionActive(Potion.blindness) && this.settings.keyBindSprint.getIsKeyPressed())
+	            if(!this.player.isSprinting() && this.player.movementInput.moveForward >= minSpeed && enoughHunger && !this.player.isUsingItem() && !this.player.isPotionActive(Potion.blindness) && this.settings.keyBindSprint.isKeyDown())
 	            {
 	               this.player.setSprinting(true);
 	               customMovementInput.UpdateSprint(true, false);
@@ -221,7 +227,7 @@ public class PlayerBase extends ClientPlayerBase
 //			//
 //			//  Debug Framework - Added 5/7/2014
 //			//
-//			if (this.showDebug && this.settings.keyBindPickBlock.getIsKeyPressed() && !this.handledDebugPress)
+//			if (this.showDebug && this.settings.keyBindPickBlock.isKeyDown() && !this.handledDebugPress)
 //			{
 //				this.player.addChatMessage(new ChatComponentText("+--------------------------------------+"));
 //				this.player.addChatMessage(new ChatComponentText("|        ToggleSneak Debug Info        |"));
@@ -232,15 +238,15 @@ public class PlayerBase extends ClientPlayerBase
 //				this.player.addChatMessage(new ChatComponentText("enableFlyBoost - " + (ToggleSneakMod.optionEnableFlyBoost == true ? "True" : "False")));
 //				this.player.addChatMessage(new ChatComponentText("flyBoostAmount - " + ToggleSneakMod.optionFlyBoostAmount));
 //				this.player.addChatMessage(new ChatComponentText("                                        "));
-//				this.player.addChatMessage(new ChatComponentText("keybindSprint  - " + (this.settings.keyBindSprint.getIsKeyPressed() == true ? "True" : "False")));
-//				this.player.addChatMessage(new ChatComponentText("keybindSneak   - " + (this.settings.keyBindSneak.getIsKeyPressed() == true ? "True" : "False")));
-//				this.player.addChatMessage(new ChatComponentText("keybindJump    - " + (this.settings.keyBindJump.getIsKeyPressed() == true ? "True" : "False")));
+//				this.player.addChatMessage(new ChatComponentText("keybindSprint  - " + (this.settings.keyBindSprint.isKeyDown() == true ? "True" : "False")));
+//				this.player.addChatMessage(new ChatComponentText("keybindSneak   - " + (this.settings.keyBindSneak.isKeyDown() == true ? "True" : "False")));
+//				this.player.addChatMessage(new ChatComponentText("keybindJump    - " + (this.settings.keyBindJump.isKeyDown() == true ? "True" : "False")));
 //				this.player.addChatMessage(new ChatComponentText("                                        "));
 //				this.player.addChatMessage(new ChatComponentText("                                        "));
 //				
 //				this.handledDebugPress = true;
 //			}
-//			else if (this.showDebug && !this.settings.keyBindPickBlock.getIsKeyPressed() && this.handledDebugPress)
+//			else if (this.showDebug && !this.settings.keyBindPickBlock.isKeyDown() && this.handledDebugPress)
 //			{
 //				this.handledDebugPress = false;
 //			}
@@ -248,7 +254,7 @@ public class PlayerBase extends ClientPlayerBase
 			//
 			//  Fly Speed Boosting - Added 5/7/2014
 			//
-			if(ToggleSneakMod.optionEnableFlyBoost && this.player.capabilities.isFlying && this.settings.keyBindSprint.getIsKeyPressed() && this.player.capabilities.isCreativeMode)
+			if(ToggleSneakMod.optionEnableFlyBoost && this.player.capabilities.isFlying && this.settings.keyBindSprint.isKeyDown() && this.player.capabilities.isCreativeMode)
 			{
 				this.player.capabilities.setFlySpeed(0.05F * (float)ToggleSneakMod.optionFlyBoostAmount);
 				
@@ -303,7 +309,7 @@ public class PlayerBase extends ClientPlayerBase
 				{
 					this.playerAPI.setHorseJumpPowerCounterField(this.playerAPI.getHorseJumpPowerCounterField() - 10);
 					this.playerAPI.setHorseJumpPowerCounterField(-10);
-					((EntityClientPlayerMP)this.player).sendQueue.addToSendQueue(new C0BPacketEntityAction(this.player, 6, (int)(this.player.getHorseJumpPower() * 100.0F)));
+					((EntityPlayerSP)this.player).sendQueue.addToSendQueue(new C0BPacketEntityAction(this.player, C0BPacketEntityAction.Action.RIDING_JUMP, (int)(this.player.getHorseJumpPower() * 100.0F)));
 				}
 				else if(!isJumping && this.player.movementInput.jump)
 				{
@@ -334,6 +340,6 @@ public class PlayerBase extends ClientPlayerBase
 				this.player.capabilities.isFlying = false;
 				this.player.sendPlayerAbilities();
 			}
-		}
+		//}
 	}
 }
