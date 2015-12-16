@@ -20,13 +20,16 @@ public class ToggleSneakMod
 {
 	public static final String ModID = "ToggleSneak";
 	public static final String ModName= "ToggleSneak";
-	public static final String ModVersion = "2.2";
+	public static final String ModVersion = "2.3";
 	
 	public static Configuration config = null;
 	public static String optionTextLocation = "topleft";
 	public static boolean optionShowHUDText = true;
 	public static boolean optionToggleSprint = true;
 	public static boolean optionDoubleTap = false;
+	public static boolean optionEnableFlyBoost = false;
+	public static double optionFlyBoostAmount = 4.0;
+	
 	
 	@Instance("ToggleSneak")
 	public static ToggleSneakMod instance;
@@ -71,6 +74,14 @@ public class ToggleSneakMod
 		property = config.get("ToggleSneak", "optionDoubleTap", optionDoubleTap);
 		property.comment = "Allow double-tapping the forward key (W) to begin sprinting";
 		optionDoubleTap = property.getBoolean(false);
+		
+		property = config.get("ToggleSneak", "optionEnableFlyBoost", optionEnableFlyBoost);
+		property.comment = "Enable speed boost when flying in creative mode";
+		optionEnableFlyBoost = property.getBoolean(false);
+		
+		property = config.get("ToggleSneak", "optionFlyBoostAmount", optionFlyBoostAmount);
+		property.comment = "The multiplier to use when boosting fly speed";
+		optionFlyBoostAmount = property.getDouble(4.0);
 		
 		config.save();
 	}

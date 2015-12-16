@@ -15,7 +15,7 @@ public class RenderTextToHUD
     {
     	if(event.type == RenderGameOverlayEvent.ElementType.TEXT)
     	{
-    		Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(TextForHUD, 1, 10, 0xffffff);
+    		Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(TextForHUD, 1, 1, 0xffffff);
     	}
     }
     

@@ -1,6 +1,16 @@
 ToggleSneak Changelog
 
 +--------------------------------------------------------------------+
+|                      Version 2.3 - 05/07/2014                      |
++--------------------------------------------------------------------+
+
+- Added a fly speed booster. optionFlyBoostAmount changes the speed
+- optionDoubleTap now applies even when optionToggleSprint is off
+
+
+
+
++--------------------------------------------------------------------+
 |                      Version 2.2 - 05/06/2014                      |
 +--------------------------------------------------------------------+
 

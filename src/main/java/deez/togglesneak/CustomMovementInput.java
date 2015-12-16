@@ -24,13 +24,6 @@ public class CustomMovementInput
 	private boolean handledSneakPress;
 	private boolean handledSprintPress;
 	private boolean wasRiding;	
-	
-	private int lastUpdated;
-	
-	private double lastPosX;
-	private double lastPosZ;
-	
-	private String moveSpeed = "0.00";
 
 	/*
 	 * 		MovementInputFromOptions.updatePlayerMoveState()
@@ -164,7 +157,11 @@ public class CustomMovementInput
 			boolean isHoldingSneak = settings.keyBindSneak.getIsKeyPressed();
 			boolean isHoldingSprint = settings.keyBindSprint.getIsKeyPressed();
 			
-			if(isFlying)	output += "[Flying]  ";
+			if(isFlying)
+			{
+				if (ToggleSneakMod.optionEnableFlyBoost && isHoldingSprint) output += "[Flying (" + ToggleSneakMod.optionFlyBoostAmount + "x boost)]  ";
+				else output += "[Flying]  ";
+			}
 			if(isRiding)	output += "[Riding]  ";
 			
 			if (options.sneak)

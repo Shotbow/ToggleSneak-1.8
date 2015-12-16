@@ -8,6 +8,7 @@ import net.minecraft.client.settings.GameSettings;
 
 import net.minecraft.network.play.client.C0BPacketEntityAction;
 import net.minecraft.potion.Potion;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MovementInputFromOptions;
 import net.minecraft.util.ResourceLocation;
 
@@ -19,6 +20,9 @@ public class PlayerBase extends ClientPlayerBase
 	private Minecraft mc = Minecraft.getMinecraft();
 	private CustomMovementInput customMovementInput = new CustomMovementInput();
 	private GameSettings settings = mc.gameSettings;
+	
+//	private boolean showDebug = true;
+//	private boolean handledDebugPress = false;
 	
 	public PlayerBase(ClientPlayerAPI api)
 	{
@@ -138,7 +142,7 @@ public class PlayerBase extends ClientPlayerBase
 			// Default Sprint routine converted to PlayerAPI, use if ToggleSprint is disabled
 			if(isDisabled)
 			{
-	            if(this.player.onGround && !isMovingForward && this.player.movementInput.moveForward >= minSpeed && !this.player.isSprinting() && enoughHunger && !this.player.isUsingItem() && !this.player.isPotionActive(Potion.blindness))
+	            if(ToggleSneakMod.optionDoubleTap && this.player.onGround && !isMovingForward && this.player.movementInput.moveForward >= minSpeed && !this.player.isSprinting() && enoughHunger && !this.player.isUsingItem() && !this.player.isPotionActive(Potion.blindness))
 	            {
 	               if(this.playerAPI.getSprintToggleTimerField() <= 0 && !this.settings.keyBindSprint.getIsKeyPressed())
 	               {
@@ -163,8 +167,10 @@ public class PlayerBase extends ClientPlayerBase
 				
 				// Only handle changes in state under the following conditions:
 				// On ground, not hungry, not eating/using item, not blind, and not Vanilla
-				
+				//
+				// 5/6/14 - onGround check removed to match vanilla's 'start sprint while jumping' behavior.
 				//if(this.player.onGround && enoughHunger && !this.player.isUsingItem() && !this.player.isPotionActive(Potion.blindness) && !this.customMovementInput.sprintHeldAndReleased)
+
 				if(enoughHunger && !this.player.isUsingItem() && !this.player.isPotionActive(Potion.blindness) && !this.customMovementInput.sprintHeldAndReleased)
 				{
 					if(canDoubleTap && !this.player.isSprinting() || !canDoubleTap)
@@ -172,11 +178,6 @@ public class PlayerBase extends ClientPlayerBase
 						this.player.setSprinting(state);
 					}
 				}
-//				else if(!this.player.isSprinting() && this.player.movementInput.moveForward >= minSpeed && enoughHunger && !this.player.isUsingItem() && !this.player.isPotionActive(Potion.blindness) && this.settings.keyBindSprint.getIsKeyPressed())
-//	            {
-//	               this.player.setSprinting(true);
-//	               customMovementInput.UpdateSprint(true, false);
-//	            }
 				
 	            if(canDoubleTap && !state && this.player.onGround && !isMovingForward && this.player.movementInput.moveForward >= minSpeed && !this.player.isSprinting() && enoughHunger && !this.player.isUsingItem() && !this.player.isPotionActive(Potion.blindness))
 	            {
@@ -209,6 +210,50 @@ public class PlayerBase extends ClientPlayerBase
 			/*
 			 * 		End ToggleSneak Changes - ToggleSprint 
 			 */
+			
+//			//
+//			//  Debug Framework - Added 5/7/2014
+//			//
+//			if (this.showDebug && this.settings.keyBindPickBlock.getIsKeyPressed() && !this.handledDebugPress)
+//			{
+//				this.player.addChatMessage(new ChatComponentText("+--------------------------------------+"));
+//				this.player.addChatMessage(new ChatComponentText("|        ToggleSneak Debug Info        |"));
+//				this.player.addChatMessage(new ChatComponentText("+--------------------------------------+"));
+//				this.player.addChatMessage(new ChatComponentText("                                        "));
+//				this.player.addChatMessage(new ChatComponentText("isFlying       - " + (this.player.capabilities.isFlying == true ? "True" : "False")));
+//				this.player.addChatMessage(new ChatComponentText("isCreative     - " + (this.player.capabilities.isCreativeMode == true ? "True" : "False")));
+//				this.player.addChatMessage(new ChatComponentText("enableFlyBoost - " + (ToggleSneakMod.optionEnableFlyBoost == true ? "True" : "False")));
+//				this.player.addChatMessage(new ChatComponentText("flyBoostAmount - " + ToggleSneakMod.optionFlyBoostAmount));
+//				this.player.addChatMessage(new ChatComponentText("                                        "));
+//				this.player.addChatMessage(new ChatComponentText("keybindSprint  - " + (this.settings.keyBindSprint.getIsKeyPressed() == true ? "True" : "False")));
+//				this.player.addChatMessage(new ChatComponentText("keybindSneak   - " + (this.settings.keyBindSneak.getIsKeyPressed() == true ? "True" : "False")));
+//				this.player.addChatMessage(new ChatComponentText("keybindJump    - " + (this.settings.keyBindJump.getIsKeyPressed() == true ? "True" : "False")));
+//				this.player.addChatMessage(new ChatComponentText("                                        "));
+//				this.player.addChatMessage(new ChatComponentText("                                        "));
+//				
+//				this.handledDebugPress = true;
+//			}
+//			else if (this.showDebug && !this.settings.keyBindPickBlock.getIsKeyPressed() && this.handledDebugPress)
+//			{
+//				this.handledDebugPress = false;
+//			}
+			
+			//
+			//  Fly Speed Boosting - Added 5/7/2014
+			//
+			if(ToggleSneakMod.optionEnableFlyBoost && this.player.capabilities.isFlying && this.settings.keyBindSprint.getIsKeyPressed() && this.player.capabilities.isCreativeMode)
+			{
+				this.player.capabilities.setFlySpeed(0.05F * (float)ToggleSneakMod.optionFlyBoostAmount);
+				
+				if(this.player.movementInput.sneak)	this.player.motionY -= 0.15D * (double)ToggleSneakMod.optionFlyBoostAmount;
+				if(this.player.movementInput.jump)	this.player.motionY += 0.15D * (double)ToggleSneakMod.optionFlyBoostAmount;
+					
+			}
+			else if(this.player.capabilities.getFlySpeed() > 0.05F)
+			{
+				this.player.capabilities.setFlySpeed(0.05F);
+			}
+			
 			
 			if(this.player.capabilities.allowFlying && !isJumping && this.player.movementInput.jump)
 			{
