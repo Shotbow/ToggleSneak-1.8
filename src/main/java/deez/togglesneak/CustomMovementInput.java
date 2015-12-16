@@ -5,7 +5,6 @@ import java.text.DecimalFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MovementInputFromOptions;
 
 /*
@@ -13,8 +12,9 @@ import net.minecraft.util.MovementInputFromOptions;
  */
 public class CustomMovementInput
 {
-	public boolean isDisabled	= !ToggleSneakMod.optionToggleSprint;
-	public boolean canDoubleTap = ToggleSneakMod.optionDoubleTap;
+	public boolean isDisabled;
+	public boolean canDoubleTap;
+	
 	public boolean sprint = false;
 	public boolean sprintHeldAndReleased = false;
 	public boolean sprintDoubleTapped = false;
@@ -61,41 +61,49 @@ public class CustomMovementInput
 		// Sneak Toggle - Essentially the same as old ToggleSneak
 		//
 		
-		// Key Pressed
-		if (settings.keyBindSneak.getIsKeyPressed() && !this.handledSneakPress)
-        {
-			// Descend if we are flying, note if we were riding (so we can unsneak once dismounted)
-        	if(thisPlayer.isRiding() || thisPlayer.capabilities.isFlying)
-        	{
-        		options.sneak = true;
-        		this.wasRiding = thisPlayer.isRiding();
-        	}
-        	else
-        	{
-        		options.sneak = !options.sneak;
-        	}
-        	
-        	this.lastPressed = System.currentTimeMillis();
-        	this.handledSneakPress = true;
-        }
-		
-		// Key Released
-        if (!settings.keyBindSneak.getIsKeyPressed() && this.handledSneakPress)
-        {
-        	// If we are flying or riding, stop sneaking after descent/dismount.
-        	if(thisPlayer.capabilities.isFlying || this.wasRiding)
-        	{
-        		options.sneak = false;
-        		this.wasRiding = false;
-        	}
-        	// If the key was held down for more than 300ms, stop sneaking upon release.
-        	else if(System.currentTimeMillis() - this.lastPressed > 300L)
-        	{
-        		options.sneak = false;
-        	}
-        	
-        	this.handledSneakPress = false;
-        }
+		// Check to see if Enabled - Added 6/17/14 to provide option to disable Sneak Toggle
+		if (ToggleSneakMod.optionToggleSneak)
+		{
+			// Key Pressed
+			if (settings.keyBindSneak.getIsKeyPressed() && !this.handledSneakPress)
+	        {
+				// Descend if we are flying, note if we were riding (so we can unsneak once dismounted)
+	        	if(thisPlayer.isRiding() || thisPlayer.capabilities.isFlying)
+	        	{
+	        		options.sneak = true;
+	        		this.wasRiding = thisPlayer.isRiding();
+	        	}
+	        	else
+	        	{
+	        		options.sneak = !options.sneak;
+	        	}
+	        	
+	        	this.lastPressed = System.currentTimeMillis();
+	        	this.handledSneakPress = true;
+	        }
+			
+			// Key Released
+	        if (!settings.keyBindSneak.getIsKeyPressed() && this.handledSneakPress)
+	        {
+	        	// If we are flying or riding, stop sneaking after descent/dismount.
+	        	if(thisPlayer.capabilities.isFlying || this.wasRiding)
+	        	{
+	        		options.sneak = false;
+	        		this.wasRiding = false;
+	        	}
+	        	// If the key was held down for more than 300ms, stop sneaking upon release.
+	        	else if(System.currentTimeMillis() - this.lastPressed > 300L)
+	        	{
+	        		options.sneak = false;
+	        	}
+	        	
+	        	this.handledSneakPress = false;
+	        }
+		}
+		else
+		{
+			options.sneak = settings.keyBindSneak.getIsKeyPressed();
+		}
 
 		if(options.sneak)
 		{
@@ -104,12 +112,15 @@ public class CustomMovementInput
 		}
 		
 		//
-		//  Sprint Toggle - Updated 4/14/2014
+		//  Sprint Toggle - Updated 6/18/2014
 		//
 		
 		// Establish conditions where we don't want to start a sprint - sneaking, riding, flying, hungry
 		boolean enoughHunger = (float)thisPlayer.getFoodStats().getFoodLevel() > 6.0F || thisPlayer.capabilities.isFlying;
 		boolean canSprint = !options.sneak && !thisPlayer.isRiding() && !thisPlayer.capabilities.isFlying && enoughHunger;
+		
+		isDisabled = !ToggleSneakMod.optionToggleSprint;
+		canDoubleTap = ToggleSneakMod.optionDoubleTap;
 		
 		// Key Pressed
 		if((canSprint || isDisabled) && settings.keyBindSprint.getIsKeyPressed() && !this.handledSprintPress)
@@ -148,7 +159,7 @@ public class CustomMovementInput
 	//
 	private void UpdateStatus(MovementInputFromOptions options, EntityPlayerSP thisPlayer, GameSettings settings)
 	{
-		if (ToggleSneakMod.optionShowHUDText)
+		if(ToggleSneakMod.optionShowHUDText)
 		{
 			String output = "";
 			

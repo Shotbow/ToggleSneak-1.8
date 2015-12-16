@@ -8,7 +8,6 @@ import net.minecraft.client.settings.GameSettings;
 
 import net.minecraft.network.play.client.C0BPacketEntityAction;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MovementInputFromOptions;
 import net.minecraft.util.ResourceLocation;
 
@@ -136,11 +135,19 @@ public class PlayerBase extends ClientPlayerBase
 			 * 		Begin ToggleSneak Changes - ToggleSprint
 			 */
 			
-			boolean isDisabled		= !ToggleSneakMod.optionToggleSprint;
-			boolean canDoubleTap	= ToggleSneakMod.optionDoubleTap;
+			boolean isSprintDisabled	= !ToggleSneakMod.optionToggleSprint;
+			boolean canDoubleTap		= ToggleSneakMod.optionDoubleTap;
+			
+			// Detect when ToggleSprint was disabled in the in-game options menu
+			if(ToggleSneakMod.wasSprintDisabled)
+			{
+				this.player.setSprinting(false);
+				customMovementInput.UpdateSprint(false, false);
+				ToggleSneakMod.wasSprintDisabled = false;
+			}
 			
 			// Default Sprint routine converted to PlayerAPI, use if ToggleSprint is disabled
-			if(isDisabled)
+			if(isSprintDisabled)
 			{
 	            if(ToggleSneakMod.optionDoubleTap && this.player.onGround && !isMovingForward && this.player.movementInput.moveForward >= minSpeed && !this.player.isSprinting() && enoughHunger && !this.player.isUsingItem() && !this.player.isPotionActive(Potion.blindness))
 	            {
@@ -201,7 +208,7 @@ public class PlayerBase extends ClientPlayerBase
 				this.player.setSprinting(false);
 				
 				// Undo toggle if we resumed vanilla operation due to Hold&Release, DoubleTap, Fly, Ride
-				if (customMovementInput.sprintHeldAndReleased == true || isDisabled || customMovementInput.sprintDoubleTapped || this.player.capabilities.isFlying || this.player.isRiding())
+				if (customMovementInput.sprintHeldAndReleased == true || isSprintDisabled || customMovementInput.sprintDoubleTapped || this.player.capabilities.isFlying || this.player.isRiding())
 				{
 					customMovementInput.UpdateSprint(false, false);
 				}
@@ -249,7 +256,7 @@ public class PlayerBase extends ClientPlayerBase
 				if(this.player.movementInput.jump)	this.player.motionY += 0.15D * (double)ToggleSneakMod.optionFlyBoostAmount;
 					
 			}
-			else if(this.player.capabilities.getFlySpeed() > 0.05F)
+			else if(this.player.capabilities.getFlySpeed() != 0.05F)
 			{
 				this.player.capabilities.setFlySpeed(0.05F);
 			}
