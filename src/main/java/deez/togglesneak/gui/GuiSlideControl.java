@@ -10,15 +10,15 @@ import net.minecraft.client.gui.GuiButton;
 public class GuiSlideControl extends GuiButton
 {
 	public String	label;			// Text displayed next to value
-	public double	curValue;		// Current Slider position, from 0 to 1
-	public double	minValue;		// Smallest value represented by the Slider
-	public double	maxValue;		// Largest value represented by the Slider
+	public float	curValue;		// Current Slider position, from 0 to 1
+	public float	minValue;		// Smallest value represented by the Slider
+	public float	maxValue;		// Largest value represented by the Slider
 	public boolean	isSliding;		// Is Control currently being manipulated?
 	public boolean	useIntegers;	// Use Integers to display values
 	
 	private static DecimalFormat numFormat = new DecimalFormat("#.00");
 	
-	public GuiSlideControl(int id, int x, int y, int width, int height, String displayString, double minVal, double maxVal, double curVal, boolean useInts)
+	public GuiSlideControl(int id, int x, int y, int width, int height, String displayString, float minVal, float maxVal, float curVal, boolean useInts)
 	{
 		super(id, x, y, width, height, (useInts ? displayString + ((int)curVal) : displayString + numFormat.format(curVal)));
 		
@@ -29,9 +29,9 @@ public class GuiSlideControl extends GuiButton
 		this.useIntegers	=	useInts;
 	}
 
-	public double GetValueAsDouble()
+	public float GetValueAsFloat()
 	{
-		return Double.valueOf(numFormat.format((maxValue - minValue) * curValue + minValue));
+		return (maxValue - minValue) * curValue + minValue;
 	}
 	
 	public int GetValueAsInt()
@@ -39,10 +39,16 @@ public class GuiSlideControl extends GuiButton
 		return (int)((maxValue - minValue) * curValue + minValue);
 	}
 	
+    protected float roundValue(float value)
+    {
+        value = 0.01F * (float)Math.round(value / 0.01F);
+        return value;
+    }
+    
 	public String GetLabel()
 	{
 		if(useIntegers)		return label + GetValueAsInt();
-		else				return label + numFormat.format(GetValueAsDouble());
+		else				return label + numFormat.format(GetValueAsFloat());
 	}
 	
 	protected void SetLabel()
@@ -50,7 +56,7 @@ public class GuiSlideControl extends GuiButton
 		displayString = GetLabel();
 	}
 	
-	protected int getHoverState(boolean isMouseOver)
+	public int getHoverState(boolean isMouseOver)
 	{
 		return 0;
 	}
@@ -61,15 +67,15 @@ public class GuiSlideControl extends GuiButton
 		{
 			if(isSliding)
 			{
-				curValue = (double)(mousePosX - (xPosition + 4)) / (double)(width - 8);
+				curValue = roundValue((float)(mousePosX - (xPosition + 4)) / (float)(width - 8));
 				
-				if(curValue < 0.0D)
+				if(curValue < 0.0F)
 				{
-					curValue = 0.0D;
+					curValue = 0.0F;
 				}
-				if(curValue > 1.0D)
+				if(curValue > 1.0F)
 				{
-					curValue = 1.0D;
+					curValue = 1.0F;
 				}
 				
 				SetLabel();
@@ -85,15 +91,15 @@ public class GuiSlideControl extends GuiButton
 	{
 		if(super.mousePressed(mc, mousePosX, mousePosY))
 		{
-			curValue = (double)(mousePosX - (xPosition + 4)) / (double)(width - 8);
+			curValue = roundValue((float)(mousePosX - (xPosition + 4)) / (float)(width - 8));
 			
-			if(curValue < 0.0D)
+			if(curValue < 0.0F)
 			{
-				curValue = 0.0D;
+				curValue = 0.0F;
 			}
-			if(curValue > 1.0D)
+			if(curValue > 1.0F)
 			{
-				curValue = 1.0D;
+				curValue = 1.0F;
 			}
 			
 			SetLabel();

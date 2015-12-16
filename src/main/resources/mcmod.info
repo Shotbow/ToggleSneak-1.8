@@ -2,9 +2,9 @@
 {
   "modid": "ToggleSneak",
   "name": "ToggleSneak",
-  "description": "ToggleSneak v3.0.1 - Now with a fancy GUI!",
-  "version": "3.0.1",
-  "mcversion": "1.7.2",
+  "description": "ToggleSneak v3.0.5 - Tbe highest version number yet!",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
   "authorList": ["deeznueces"],

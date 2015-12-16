@@ -42,7 +42,7 @@ public class GuiTSConfig extends GuiScreen
 		this.buttonList.clear();
 		
 		headerPos = this.height / 4 - 52;
-		footerPos = getRowPos(8);
+		footerPos = this.height - 29;
 				
 		this.btnToggleSneak		= new GuiButton(1,	this.width / 2 - 98,	getRowPos(1), 60, 20, String.valueOf(ToggleSneakMod.optionToggleSneak));
 		this.btnToggleSprint	= new GuiButton(2,	this.width / 2 + 102,	getRowPos(1), 60, 20, String.valueOf(ToggleSneakMod.optionToggleSprint));
@@ -54,10 +54,10 @@ public class GuiTSConfig extends GuiScreen
 		this.btnDoubleTap		= new GuiButton(4,	this.width / 2 + 2,	getRowPos(5), 60, 20, String.valueOf(ToggleSneakMod.optionDoubleTap));
 		this.btnFlyBoost		= new GuiButton(5,	this.width / 2 + 2,	getRowPos(6), 60, 20, String.valueOf(ToggleSneakMod.optionEnableFlyBoost));
 		
-		this.sliderFlyBoostAmount = new GuiSlideControl(70, this.width / 2 + 2, getRowPos(7), 150, 20, "x", 0.0, 10.0, ToggleSneakMod.optionFlyBoostAmount, false);
+		this.sliderFlyBoostAmount = new GuiSlideControl(70, this.width / 2 + 2, getRowPos(7), 150, 20, "x", 0.0F, 10.0F, (float)ToggleSneakMod.optionFlyBoostAmount, false);
 
-		this.btnSaveSettings	= new GuiButton(100, this.width / 2 - 62,getRowPos(8), 60, 20, "Save");
-		this.btnCancelChanges	= new GuiButton(110, this.width / 2 + 2, getRowPos(8), 60, 20, "Cancel");
+		this.btnSaveSettings	= new GuiButton(100, this.width / 2 - 155, footerPos, 150, 20, "Save Settings");
+		this.btnCancelChanges	= new GuiButton(110, this.width / 2 + 5,  footerPos, 150, 20, "Cancel Changes");
 		
 		this.buttonList.add(btnToggleSneak);
 		this.buttonList.add(btnToggleSprint);
@@ -165,7 +165,7 @@ public class GuiTSConfig extends GuiScreen
 				
 			// sliderFlyBoostAmount
 			case 70:
-				ToggleSneakMod.optionFlyBoostAmount = sliderFlyBoostAmount.GetValueAsDouble();
+				ToggleSneakMod.optionFlyBoostAmount = sliderFlyBoostAmount.GetValueAsFloat();
 				break;
 				
 			// btnSaveSettings
@@ -196,7 +196,7 @@ public class GuiTSConfig extends GuiScreen
 		}
 	}
 	
-	public void drawScreen(int par1, int par2, float par3)
+	public void drawScreen(int mouseX, int mouseY, float partialTicks)
 	{	
 		String lblToggleSneak		= "Enable ToggleSneak";
 		String lblToggleSprint		= "Enable ToggleSprint";
@@ -222,6 +222,6 @@ public class GuiTSConfig extends GuiScreen
 		this.drawString(fontRendererObj, lblFlyBoost,		this.width / 2 - 3 - this.fontRendererObj.getStringWidth(lblFlyBoost),			getRowPos(6) + 6, 16777215);
 		this.drawString(fontRendererObj, lblFlyBoostAmount,	this.width / 2 - 3 - this.fontRendererObj.getStringWidth(lblFlyBoostAmount),	getRowPos(7) + 6, 16777215);
 
-		super.drawScreen(par1, par2, par3);
+		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 }

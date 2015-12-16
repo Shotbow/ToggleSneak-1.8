@@ -9,11 +9,8 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import deez.togglesneak.proxy.CommonProxy;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-
-import api.player.client.ClientPlayerAPI;
 
 @Mod
 (
@@ -27,7 +24,7 @@ public class ToggleSneakMod
 {
 	public static final String	ModID		= "ToggleSneak";
 	public static final String	ModName		= "ToggleSneak";
-	public static final String	ModVersion	= "3.0";
+	public static final String	ModVersion	= "3.0.3";
 	
 	public static Configuration config					= null;
 	public static File			configFile				= null;

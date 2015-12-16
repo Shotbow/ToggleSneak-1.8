@@ -170,7 +170,8 @@ public class CustomMovementInput
 			
 			if(isFlying)
 			{
-				if (ToggleSneakMod.optionEnableFlyBoost && isHoldingSprint) output += "[Flying (" + ToggleSneakMod.optionFlyBoostAmount + "x boost)]  ";
+				DecimalFormat numFormat = new DecimalFormat("#.00");
+				if (ToggleSneakMod.optionEnableFlyBoost && isHoldingSprint) output += "[Flying (" + numFormat.format(ToggleSneakMod.optionFlyBoostAmount) + "x boost)]  ";
 				else output += "[Flying]  ";
 			}
 			if(isRiding)	output += "[Riding]  ";

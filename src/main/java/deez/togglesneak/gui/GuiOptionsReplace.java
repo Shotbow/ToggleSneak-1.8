@@ -1,7 +1,5 @@
 package deez.togglesneak.gui;
 
-import org.apache.logging.log4j.core.filter.BurstFilter;
-
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.client.gui.GuiScreen;
@@ -20,7 +18,7 @@ public class GuiOptionsReplace extends GuiOptions
 	{
 		super.initGui();
 		
-		btnToggleSneakOptions = new GuiButton(9999, this.width /2 + 2, this.height / 6 + 42, 150, 20, "ToggleSneak Options");
+		btnToggleSneakOptions = new GuiButton(9999, this.width /2 - 155, this.height / 6 + 42, 150, 20, "ToggleSneak Options");
 		this.buttonList.add(btnToggleSneakOptions);
 	}
 	

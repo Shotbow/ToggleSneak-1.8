@@ -18,7 +18,7 @@ public class RenderTextToHUD
     	{
     		if(ToggleSneakMod.optionShowHUDText)
     		{
-    			Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(textForHUD, ToggleSneakMod.optionHUDTextPosX, ToggleSneakMod.optionHUDTextPosY, 0xffffff);
+    			mc.fontRenderer.drawStringWithShadow(textForHUD, ToggleSneakMod.optionHUDTextPosX, ToggleSneakMod.optionHUDTextPosY, 0xffffff);
     		}
     	}
     }
