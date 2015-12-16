@@ -2,6 +2,8 @@ package deez.togglesneak.gui;
 
 import java.io.IOException;
 
+import deez.togglesneak.ToggleSneakMod;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.client.gui.GuiScreen;
@@ -16,14 +18,21 @@ public class GuiOptionsReplace extends GuiOptions
 		super(parentScreen, settings);
 	}
 	
+	@Override
 	public void initGui()
 	{
 		super.initGui();
 		
-		btnToggleSneakOptions = new GuiButton(9999, this.width /2 - 155, this.height / 6 + 42, 150, 20, "ToggleSneak Options");
+		int yPos;
+		
+		if(ToggleSneakMod.optionButtonPosition == 1)	yPos = -155;
+		else 											yPos = 5;
+				
+		btnToggleSneakOptions = new GuiButton(9999, this.width /2 + yPos, this.height / 6 + 24 - 6, 150, 20, "ToggleSneak Options");
 		this.buttonList.add(btnToggleSneakOptions);
 	}
 	
+	@Override
 	protected void actionPerformed(GuiButton buttonPressed)
 	{
 		try

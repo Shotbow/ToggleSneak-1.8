@@ -9,20 +9,24 @@ import java.util.Set;
 
 public class TSGuiFactoryHandler implements IModGuiFactory
 {
+	@Override
 	public void initialize(Minecraft mcInstance)
 	{		
 	}
 	
+	@Override
 	public Class<? extends GuiScreen> mainConfigGuiClass()
 	{
 		return GuiTSConfig.class;
 	}
 	
+	@Override
 	public Set<RuntimeOptionCategoryElement> runtimeGuiCategories()
 	{
 		return null;
 	}
 	
+	@Override
 	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element)
 	{
 		return null;

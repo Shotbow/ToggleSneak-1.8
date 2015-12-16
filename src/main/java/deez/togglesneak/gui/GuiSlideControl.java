@@ -56,16 +56,18 @@ public class GuiSlideControl extends GuiButton
 		displayString = GetLabel();
 	}
 	
-	public int getHoverState(boolean isMouseOver)
+	@Override
+	protected int getHoverState(boolean isMouseOver)
 	{
 		return 0;
 	}
 	
+	@Override
 	protected void mouseDragged(Minecraft mc, int mousePosX, int mousePosY)
 	{
 		if(visible)
 		{
-			if(isSliding)
+			if(this.isSliding)
 			{
 				curValue = roundValue((float)(mousePosX - (xPosition + 4)) / (float)(width - 8));
 				
@@ -87,6 +89,7 @@ public class GuiSlideControl extends GuiButton
 		}
 	}
 	
+	@Override
 	public boolean mousePressed(Minecraft mc, int mousePosX, int mousePosY)
 	{
 		if(super.mousePressed(mc, mousePosX, mousePosY))
@@ -103,7 +106,7 @@ public class GuiSlideControl extends GuiButton
 			}
 			
 			SetLabel();
-			isSliding = true;
+			this.isSliding = true;
 			return true;
 		}
 		else
@@ -112,8 +115,9 @@ public class GuiSlideControl extends GuiButton
 		}
 	}
 	
+	@Override
 	public void mouseReleased(int mousePosX, int mousePosY)
 	{
-		isSliding = false;
+		this.isSliding = false;
 	}
 }

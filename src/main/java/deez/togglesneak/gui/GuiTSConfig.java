@@ -15,6 +15,7 @@ public class GuiTSConfig extends GuiScreen
 	private GuiButton btnShowHUDText;
 	private GuiButton btnDoubleTap;
 	private GuiButton btnFlyBoost;
+	private GuiButton btnOptionsButton;
 	private GuiButton btnSaveSettings;
 	private GuiButton btnCancelChanges;
 	
@@ -37,6 +38,7 @@ public class GuiTSConfig extends GuiScreen
 		this.parentScreen = parent;
 	}
 	
+	@Override
 	public void initGui()
 	{
 		this.buttonList.clear();
@@ -52,9 +54,11 @@ public class GuiTSConfig extends GuiScreen
 		this.sliderHUDTextPosY	= new GuiSlideControl(60, this.width / 2 + 2, getRowPos(4), 150, 20, "Y Pos: ", 1, height - 8, ToggleSneakMod.optionHUDTextPosY, true);
 		
 		this.btnDoubleTap		= new GuiButton(4,	this.width / 2 + 2,	getRowPos(5), 60, 20, String.valueOf(ToggleSneakMod.optionDoubleTap));
-		this.btnFlyBoost		= new GuiButton(5,	this.width / 2 + 2,	getRowPos(6), 60, 20, String.valueOf(ToggleSneakMod.optionEnableFlyBoost));
+		this.btnFlyBoost		= new GuiButton(5,	this.width / 2 - 113,getRowPos(6), 60, 20, String.valueOf(ToggleSneakMod.optionEnableFlyBoost));
 		
-		this.sliderFlyBoostAmount = new GuiSlideControl(70, this.width / 2 + 2, getRowPos(7), 150, 20, "x", 0.0F, 10.0F, (float)ToggleSneakMod.optionFlyBoostAmount, false);
+		this.sliderFlyBoostAmount = new GuiSlideControl(70, this.width / 2 + 57, getRowPos(6), 150, 20, "x", 0.0F, 10.0F, (float)ToggleSneakMod.optionFlyBoostAmount, false);
+		
+		this.btnOptionsButton	= new GuiButton(6, this.width / 2 + 2, getRowPos(7), 60, 20, ToggleSneakMod.optionButtonPosition == 1 ? "Left" : "Right");
 
 		this.btnSaveSettings	= new GuiButton(100, this.width / 2 - 155, footerPos, 150, 20, "Save Settings");
 		this.btnCancelChanges	= new GuiButton(110, this.width / 2 + 5,  footerPos, 150, 20, "Cancel Changes");
@@ -69,6 +73,9 @@ public class GuiTSConfig extends GuiScreen
 		this.buttonList.add(btnDoubleTap);
 		this.buttonList.add(btnFlyBoost);
 		this.buttonList.add((GuiButton)sliderFlyBoostAmount);
+		
+		this.buttonList.add(btnOptionsButton);
+		
 		this.buttonList.add(btnSaveSettings);
 		this.buttonList.add(btnCancelChanges);
 	}
@@ -78,6 +85,7 @@ public class GuiTSConfig extends GuiScreen
 		return this.height / 4 + 0 + ((24 * rowNumber) - 24)   + byte0;
 	}
 	
+	@Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton)
     {
         if (mouseButton == 0)
@@ -96,7 +104,8 @@ public class GuiTSConfig extends GuiScreen
     }
 	
 	// Update values when sliding the SlideControl
-    protected void mouseMovedOrUp(int mouseX, int mouseY, int which)
+    @Override
+    protected void mouseReleased(int mouseX, int mouseY, int which)
     {
         if (this.lastPressed != null && which == 0)
         {
@@ -117,6 +126,7 @@ public class GuiTSConfig extends GuiScreen
     	}
     }
 	
+    @Override
 	protected void actionPerformed(GuiButton button)
 	{
 		switch(button.id)
@@ -151,6 +161,14 @@ public class GuiTSConfig extends GuiScreen
 			case 5:
 				ToggleSneakMod.optionEnableFlyBoost = !ToggleSneakMod.optionEnableFlyBoost;
 				this.btnFlyBoost.displayString = String.valueOf(ToggleSneakMod.optionEnableFlyBoost);
+				break;
+			
+			//btnOptionsButton
+			case 6:
+				if(ToggleSneakMod.optionButtonPosition == 0)		ToggleSneakMod.optionButtonPosition = 1;
+				else if(ToggleSneakMod.optionButtonPosition == 1)	ToggleSneakMod.optionButtonPosition = 0;
+				
+				this.btnOptionsButton.displayString = ToggleSneakMod.optionButtonPosition == 1 ? "Left" : "Right";
 				break;
 				
 			// sliderHUDTextPosX
@@ -196,6 +214,7 @@ public class GuiTSConfig extends GuiScreen
 		}
 	}
 	
+    @Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks)
 	{	
 		String lblToggleSneak		= "Enable ToggleSneak";
@@ -204,24 +223,27 @@ public class GuiTSConfig extends GuiScreen
 		String lblHUDTextPosX		= "Horizontal HUD Location";
 		String lblHUDTextPosY		= "Vertical HUD Location";
 		String lblDoubleTap			= "Enable Double-Tapping";
-		String lblFlyBoost			= "Enable Fly Boosting";
+		String lblFlyBoost			= "Enable Fly Boost";
 		String lblFlyBoostAmount	= "Fly Boost Multiplier";
+		String lblOptionsButton		= "Options Button Location";
 
 		this.drawDefaultBackground();
 		
 		this.drawCenteredString(this.fontRendererObj, "ToggleSneak Settings", this.width / 2, headerPos, 16777215);
 		
 		this.drawString(fontRendererObj, lblToggleSneak,	this.width / 2 - 100 - this.fontRendererObj.getStringWidth(lblToggleSneak),		getRowPos(1) + 6, 16777215);
-		this.drawString(fontRendererObj, lblToggleSprint,	this.width / 2 + 100  - this.fontRendererObj.getStringWidth(lblToggleSprint),	getRowPos(1) + 6, 16777215);
+		this.drawString(fontRendererObj, lblToggleSprint,	this.width / 2 + 100 - this.fontRendererObj.getStringWidth(lblToggleSprint),	getRowPos(1) + 6, 16777215);
 		this.drawString(fontRendererObj, lblShowHUDText,	this.width / 2 - 3 - this.fontRendererObj.getStringWidth(lblShowHUDText),		getRowPos(2) + 6, 16777215);
 		
 		this.drawString(fontRendererObj, lblHUDTextPosX,	this.width / 2 - 3 - this.fontRendererObj.getStringWidth(lblHUDTextPosX),		getRowPos(3) + 6, 16777215);
 		this.drawString(fontRendererObj, lblHUDTextPosY,	this.width / 2 - 3 - this.fontRendererObj.getStringWidth(lblHUDTextPosY),		getRowPos(4) + 6, 16777215);
 		
-		this.drawString(fontRendererObj, lblDoubleTap,		this.width / 2 - 3 - this.fontRendererObj.getStringWidth(lblDoubleTap),			getRowPos(5) + 6, 16777215);
-		this.drawString(fontRendererObj, lblFlyBoost,		this.width / 2 - 3 - this.fontRendererObj.getStringWidth(lblFlyBoost),			getRowPos(6) + 6, 16777215);
-		this.drawString(fontRendererObj, lblFlyBoostAmount,	this.width / 2 - 3 - this.fontRendererObj.getStringWidth(lblFlyBoostAmount),	getRowPos(7) + 6, 16777215);
-
+		this.drawString(fontRendererObj, lblDoubleTap,		this.width / 2 - 3 	 - this.fontRendererObj.getStringWidth(lblDoubleTap),		getRowPos(5) + 6, 16777215);
+		this.drawString(fontRendererObj, lblFlyBoost,		this.width / 2 - 115 - this.fontRendererObj.getStringWidth(lblFlyBoost),			getRowPos(6) + 6, 16777215);
+		this.drawString(fontRendererObj, lblFlyBoostAmount,	this.width / 2 + 50 - this.fontRendererObj.getStringWidth(lblFlyBoostAmount),	getRowPos(6) + 6, 16777215);
+		
+		this.drawString(fontRendererObj, lblOptionsButton, this.width / 2 - 3 - this.fontRendererObj.getStringWidth(lblOptionsButton),		getRowPos(7) + 6, 16777215);
+		
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 }

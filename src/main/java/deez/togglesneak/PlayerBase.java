@@ -31,6 +31,7 @@ public class PlayerBase extends ClientPlayerBase
 	/*
 	 * 		EntityPlayerSP.onLivingUpdate() - Adapted to PlayerAPI
 	 */
+	@Override
 	public void onLivingUpdate()
 	{
 		if(this.player.sprintingTicksLeft > 0)

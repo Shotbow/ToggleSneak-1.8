@@ -1,6 +1,14 @@
 ToggleSneak Changelog
 
 +------------------------------------------------------------------------------+
+|                         Version 3.1.1 - 02-04-2015                           |
++------------------------------------------------------------------------------+
+- Updated to Forge 11.14.0.1299
+- Fixed a bug where the Options Sliders were not working properly
+- Moved the TS Options button up to not conflict with Skin Customization button
+- New option to move the ToggleSneak options button in case of conflicts
+
++------------------------------------------------------------------------------+
 |                         Version 3.1.0 - 01-23-2015                           |
 +------------------------------------------------------------------------------+
 - Updated to Minecraft 1.8, Forge 11.14.0.1290 and PlayerAPI-1.8-1.0
