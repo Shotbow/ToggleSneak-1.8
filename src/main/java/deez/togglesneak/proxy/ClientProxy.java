@@ -22,7 +22,7 @@ public class ClientProxy extends CommonProxy
 	{
 		if (ToggleSneakMod.optionShowHUDText)
 		{
-			RenderTextToHUD.SetHUDText(ToggleSneakMod.ModID + " " + ToggleSneakMod.ModVersion);
+			RenderTextToHUD.SetHUDText(ToggleSneakMod.ModID + " for Forge - version " + ToggleSneakMod.ModVersion + " Beta!");
 		}
 		ClientPlayerAPI.register("ToggleSneak", PlayerBase.class);
 	}

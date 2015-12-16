@@ -4,6 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.settings.GameSettings;
+
 import net.minecraft.network.play.client.C0BPacketEntityAction;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.MovementInputFromOptions;
@@ -16,6 +18,7 @@ public class PlayerBase extends ClientPlayerBase
 {
 	private Minecraft mc = Minecraft.getMinecraft();
 	private CustomMovementInput customMovementInput = new CustomMovementInput();
+	private GameSettings settings = mc.gameSettings;
 	
 	public PlayerBase(ClientPlayerAPI api)
 	{
@@ -126,28 +129,85 @@ public class PlayerBase extends ClientPlayerBase
 			boolean enoughHunger = (float)this.player.getFoodStats().getFoodLevel() > 6.0F || this.player.capabilities.isFlying;
 			
 			/*
-			 * 		Begin ToggleSneak Changes
+			 * 		Begin ToggleSneak Changes - ToggleSprint
 			 */
 			
-			boolean state = this.customMovementInput.sprint;
+			boolean isDisabled		= !ToggleSneakMod.optionToggleSprint;
+			boolean canDoubleTap	= ToggleSneakMod.optionDoubleTap;
 			
-//			if (!this.player.capabilities.isFlying  && ((MovementInputFromOptions) this.player.movementInput).sneak)
-//			{
-//				state = false;
-//			}
-			
-			if(this.player.onGround && enoughHunger && !this.player.isUsingItem() && !this.player.isPotionActive(Potion.blindness))
+			// Default Sprint routine converted to PlayerAPI, use if ToggleSprint is disabled
+			if(isDisabled)
 			{
-				this.player.setSprinting(state);
+	            if(this.player.onGround && !isMovingForward && this.player.movementInput.moveForward >= minSpeed && !this.player.isSprinting() && enoughHunger && !this.player.isUsingItem() && !this.player.isPotionActive(Potion.blindness))
+	            {
+	               if(this.playerAPI.getSprintToggleTimerField() <= 0 && !this.settings.keyBindSprint.getIsKeyPressed())
+	               {
+	                  this.playerAPI.setSprintToggleTimerField(7);
+	               }
+	               else
+	               {
+	                  this.player.setSprinting(true);
+	                  customMovementInput.UpdateSprint(true, false);
+	               }
+	            }
+
+	            if(!this.player.isSprinting() && this.player.movementInput.moveForward >= minSpeed && enoughHunger && !this.player.isUsingItem() && !this.player.isPotionActive(Potion.blindness) && this.settings.keyBindSprint.getIsKeyPressed())
+	            {
+	               this.player.setSprinting(true);
+	               customMovementInput.UpdateSprint(true, false);
+	            }
+			}
+			else
+			{
+				boolean state = this.customMovementInput.sprint;
+				
+				// Only handle changes in state under the following conditions:
+				// On ground, not hungry, not eating/using item, not blind, and not Vanilla
+				
+				//if(this.player.onGround && enoughHunger && !this.player.isUsingItem() && !this.player.isPotionActive(Potion.blindness) && !this.customMovementInput.sprintHeldAndReleased)
+				if(enoughHunger && !this.player.isUsingItem() && !this.player.isPotionActive(Potion.blindness) && !this.customMovementInput.sprintHeldAndReleased)
+				{
+					if(canDoubleTap && !this.player.isSprinting() || !canDoubleTap)
+					{
+						this.player.setSprinting(state);
+					}
+				}
+//				else if(!this.player.isSprinting() && this.player.movementInput.moveForward >= minSpeed && enoughHunger && !this.player.isUsingItem() && !this.player.isPotionActive(Potion.blindness) && this.settings.keyBindSprint.getIsKeyPressed())
+//	            {
+//	               this.player.setSprinting(true);
+//	               customMovementInput.UpdateSprint(true, false);
+//	            }
+				
+	            if(canDoubleTap && !state && this.player.onGround && !isMovingForward && this.player.movementInput.moveForward >= minSpeed && !this.player.isSprinting() && enoughHunger && !this.player.isUsingItem() && !this.player.isPotionActive(Potion.blindness))
+	            {
+	               if(this.playerAPI.getSprintToggleTimerField() == 0)
+	               {
+	                  this.playerAPI.setSprintToggleTimerField(7);
+	               }
+	               else
+	               {
+	                  this.player.setSprinting(true);
+	                  customMovementInput.UpdateSprint(true, true);
+	                  this.playerAPI.setSprintToggleTimerField(0);
+	               }
+	            }
 			}
 			
+			// If sprinting, break the sprint in appropriate circumstances:
+			// Player stops moving forward, runs into something, or gets too hungry
 			if(this.player.isSprinting() && (this.player.movementInput.moveForward < minSpeed || this.player.isCollidedHorizontally || !enoughHunger))
 			{
 				this.player.setSprinting(false);
+				
+				// Undo toggle if we resumed vanilla operation due to Hold&Release, DoubleTap, Fly, Ride
+				if (customMovementInput.sprintHeldAndReleased == true || isDisabled || customMovementInput.sprintDoubleTapped || this.player.capabilities.isFlying || this.player.isRiding())
+				{
+					customMovementInput.UpdateSprint(false, false);
+				}
 			}
 			
 			/*
-			 * 		End ToggleSneak Changes
+			 * 		End ToggleSneak Changes - ToggleSprint 
 			 */
 			
 			if(this.player.capabilities.allowFlying && !isJumping && this.player.movementInput.jump)

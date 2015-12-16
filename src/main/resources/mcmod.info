@@ -1,0 +1,16 @@
+[
+{
+  "modid": "ToggleSneak",
+  "name": "ToggleSneak",
+  "description": "ToggleSneak v2 - Now with ToggleSprint and Forge support!",
+  "version": "2.2",
+  "mcversion": "1.7.2",
+  "url": "",
+  "updateUrl": "",
+  "authors": ["deeznueces"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

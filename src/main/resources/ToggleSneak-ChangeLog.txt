@@ -1,0 +1,20 @@
+ToggleSneak Changelog
+
++--------------------------------------------------------------------+
+|                      Version 2.2 - 05/06/2014                      |
++--------------------------------------------------------------------+
+
+- Allow sprinting to start while jumping to match vanilla behavior
+
+
+
+
++--------------------------------------------------------------------+
+|                      Version 2.1 - 04/14/2014                      |
++--------------------------------------------------------------------+
+
+- Consolidated HUD Display logic, eliminating a few display errors
+- Prevent changing of Sprint status while sneaking, flying or riding
+- Releasing the sprint key after holding it now mimics vanilla sprint
+- ToggleSprint can now be disabled in the configuration file
+- Double-Tapping the Forward key now enables vanilla sprinting

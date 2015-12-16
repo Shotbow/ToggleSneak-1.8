@@ -20,11 +20,13 @@ public class ToggleSneakMod
 {
 	public static final String ModID = "ToggleSneak";
 	public static final String ModName= "ToggleSneak";
-	public static final String ModVersion = "2.0 for Forge - BETA!";
+	public static final String ModVersion = "2.2";
 	
 	public static Configuration config = null;
 	public static String optionTextLocation = "topleft";
 	public static boolean optionShowHUDText = true;
+	public static boolean optionToggleSprint = true;
+	public static boolean optionDoubleTap = false;
 	
 	@Instance("ToggleSneak")
 	public static ToggleSneakMod instance;
@@ -44,11 +46,7 @@ public class ToggleSneakMod
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
-		if (optionShowHUDText)
-		{
-			RenderTextToHUD.SetHUDText(ModID + " " + ModVersion);
-		}
-		ClientPlayerAPI.register("ToggleSneak", PlayerBase.class);
+		proxy.initMod();
 	}
 	
 	public static void loadConfig(File configFile)
@@ -63,8 +61,16 @@ public class ToggleSneakMod
 		optionShowHUDText = property.getBoolean(true);
 		
 		property = config.get("ToggleSneak", "optionTextLocation", optionTextLocation);
-		property.comment = "Where to display the HUD info. Possible values: topleft, topright, bottomleft, bottomright";
+		property.comment = "Placeholder Option - Not yet implemented!";
 		optionTextLocation = property.getString();
+		
+		property = config.get("ToggleSneak", "optionToggleSprint", optionToggleSprint);
+		property.comment = "If true, use Sprint Toggling - If false, use vanilla sprinting";
+		optionToggleSprint = property.getBoolean(true);
+		
+		property = config.get("ToggleSneak", "optionDoubleTap", optionDoubleTap);
+		property.comment = "Allow double-tapping the forward key (W) to begin sprinting";
+		optionDoubleTap = property.getBoolean(false);
 		
 		config.save();
 	}
