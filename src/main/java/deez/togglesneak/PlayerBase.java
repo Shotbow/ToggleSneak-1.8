@@ -1,18 +1,14 @@
 package deez.togglesneak;
 
+import api.player.client.ClientPlayerAPI;
+import api.player.client.ClientPlayerBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.GameSettings;
-
 import net.minecraft.network.play.client.C0BPacketEntityAction;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.MovementInputFromOptions;
 import net.minecraft.util.ResourceLocation;
-
-import api.player.client.ClientPlayerAPI;
-import api.player.client.ClientPlayerBase;
 
 public class PlayerBase extends ClientPlayerBase
 {
@@ -66,7 +62,7 @@ public class PlayerBase extends ClientPlayerBase
 			{
 				if(this.mc.currentScreen != null)
 				{
-					this.mc.displayGuiScreen((GuiScreen)null);
+					this.mc.displayGuiScreen(null);
 				}
 
 				if(this.player.timeInPortal == 0.0F)
@@ -111,7 +107,7 @@ public class PlayerBase extends ClientPlayerBase
 			}
 
 			boolean isJumping = this.player.movementInput.jump;
-			
+
 			float minSpeed = 0.8F;
 			boolean isMovingForward = this.player.movementInput.moveForward >= minSpeed;
 			this.customMovementInput.update(this.mc, (MovementInputFromOptions)this.player.movementInput, this.player);
@@ -122,14 +118,14 @@ public class PlayerBase extends ClientPlayerBase
 				this.player.movementInput.moveForward *= 0.2F;
 				this.playerAPI.setSprintToggleTimerField(0);
 			}
-			
+
 			/* TODO: removed in vanilla 1.8 - investigate
 
 			if(this.player.movementInput.sneak && this.player.ySize < 0.2F)
 			{
 				this.player.ySize = 0.2F;
 			}
-			
+
 			*/
 
 			this.playerAPI.localPushOutOfBlocks(this.player.posX - (double)this.player.width * 0.35D, this.player.getEntityBoundingBox().minY + 0.5D, this.player.posZ + (double)this.player.width * 0.35D);
@@ -137,14 +133,14 @@ public class PlayerBase extends ClientPlayerBase
 			this.playerAPI.localPushOutOfBlocks(this.player.posX + (double)this.player.width * 0.35D, this.player.getEntityBoundingBox().minY + 0.5D, this.player.posZ - (double)this.player.width * 0.35D);
 			this.playerAPI.localPushOutOfBlocks(this.player.posX + (double)this.player.width * 0.35D, this.player.getEntityBoundingBox().minY + 0.5D, this.player.posZ + (double)this.player.width * 0.35D);
 			boolean enoughHunger = (float)this.player.getFoodStats().getFoodLevel() > 6.0F || this.player.capabilities.isFlying;
-			
+
 			/*
 			 * 		Begin ToggleSneak Changes - ToggleSprint
 			 */
-			
+
 			boolean isSprintDisabled	= !ToggleSneakMod.optionToggleSprint;
 			boolean canDoubleTap		= ToggleSneakMod.optionDoubleTap;
-			
+
 			// Detect when ToggleSprint was disabled in the in-game options menu
 			if(ToggleSneakMod.wasSprintDisabled)
 			{
@@ -152,7 +148,7 @@ public class PlayerBase extends ClientPlayerBase
 				customMovementInput.UpdateSprint(false, false);
 				ToggleSneakMod.wasSprintDisabled = false;
 			}
-			
+
 			// Default Sprint routine converted to PlayerAPI, use if ToggleSprint is disabled
 			if(isSprintDisabled)
 			{
@@ -178,7 +174,7 @@ public class PlayerBase extends ClientPlayerBase
 			else
 			{
 				boolean state = this.customMovementInput.sprint;
-				
+
 				// Only handle changes in state under the following conditions:
 				// On ground, not hungry, not eating/using item, not blind, and not Vanilla
 				//
@@ -187,12 +183,12 @@ public class PlayerBase extends ClientPlayerBase
 
 				if(enoughHunger && !this.player.isUsingItem() && !this.player.isPotionActive(Potion.blindness) && !this.customMovementInput.sprintHeldAndReleased)
 				{
-					if(canDoubleTap && !this.player.isSprinting() || !canDoubleTap)
+					if(!canDoubleTap || !this.player.isSprinting())
 					{
 						this.player.setSprinting(state);
 					}
 				}
-				
+
 	            if(canDoubleTap && !state && this.player.onGround && !isMovingForward && this.player.movementInput.moveForward >= minSpeed && !this.player.isSprinting() && enoughHunger && !this.player.isUsingItem() && !this.player.isPotionActive(Potion.blindness))
 	            {
 	               if(this.playerAPI.getSprintToggleTimerField() == 0)
@@ -207,24 +203,24 @@ public class PlayerBase extends ClientPlayerBase
 	               }
 	            }
 			}
-			
+
 			// If sprinting, break the sprint in appropriate circumstances:
 			// Player stops moving forward, runs into something, or gets too hungry
 			if(this.player.isSprinting() && (this.player.movementInput.moveForward < minSpeed || this.player.isCollidedHorizontally || !enoughHunger))
 			{
 				this.player.setSprinting(false);
-				
+
 				// Undo toggle if we resumed vanilla operation due to Hold&Release, DoubleTap, Fly, Ride
-				if (customMovementInput.sprintHeldAndReleased == true || isSprintDisabled || customMovementInput.sprintDoubleTapped || this.player.capabilities.isFlying || this.player.isRiding())
+				if (customMovementInput.sprintHeldAndReleased || isSprintDisabled || customMovementInput.sprintDoubleTapped || this.player.capabilities.isFlying || this.player.isRiding())
 				{
 					customMovementInput.UpdateSprint(false, false);
 				}
 			}
-			
+
 			/*
-			 * 		End ToggleSneak Changes - ToggleSprint 
+			 * 		End ToggleSneak Changes - ToggleSprint
 			 */
-			
+
 //			//
 //			//  Debug Framework - Added 5/7/2014
 //			//
@@ -244,31 +240,31 @@ public class PlayerBase extends ClientPlayerBase
 //				this.player.addChatMessage(new ChatComponentText("keybindJump    - " + (this.settings.keyBindJump.isKeyDown() == true ? "True" : "False")));
 //				this.player.addChatMessage(new ChatComponentText("                                        "));
 //				this.player.addChatMessage(new ChatComponentText("                                        "));
-//				
+//
 //				this.handledDebugPress = true;
 //			}
 //			else if (this.showDebug && !this.settings.keyBindPickBlock.isKeyDown() && this.handledDebugPress)
 //			{
 //				this.handledDebugPress = false;
 //			}
-			
+
 			//
 			//  Fly Speed Boosting - Added 5/7/2014
 			//
 			if(ToggleSneakMod.optionEnableFlyBoost && this.player.capabilities.isFlying && this.settings.keyBindSprint.isKeyDown() && this.player.capabilities.isCreativeMode)
 			{
 				this.player.capabilities.setFlySpeed(0.05F * (float)ToggleSneakMod.optionFlyBoostAmount);
-				
-				if(this.player.movementInput.sneak)	this.player.motionY -= 0.15D * (double)ToggleSneakMod.optionFlyBoostAmount;
-				if(this.player.movementInput.jump)	this.player.motionY += 0.15D * (double)ToggleSneakMod.optionFlyBoostAmount;
-					
+
+				if(this.player.movementInput.sneak)	this.player.motionY -= 0.15D * ToggleSneakMod.optionFlyBoostAmount;
+				if(this.player.movementInput.jump)	this.player.motionY += 0.15D * ToggleSneakMod.optionFlyBoostAmount;
+
 			}
 			else if(this.player.capabilities.getFlySpeed() != 0.05F)
 			{
 				this.player.capabilities.setFlySpeed(0.05F);
 			}
-			
-			
+
+
 			if(this.player.capabilities.allowFlying && !isJumping && this.player.movementInput.jump)
 			{
 				if(this.playerAPI.getFlyToggleTimerField() == 0)
@@ -310,7 +306,7 @@ public class PlayerBase extends ClientPlayerBase
 				{
 					this.playerAPI.setHorseJumpPowerCounterField(this.playerAPI.getHorseJumpPowerCounterField() - 10);
 					this.playerAPI.setHorseJumpPowerCounterField(-10);
-					((EntityPlayerSP)this.player).sendQueue.addToSendQueue(new C0BPacketEntityAction(this.player, C0BPacketEntityAction.Action.RIDING_JUMP, (int)(this.player.getHorseJumpPower() * 100.0F)));
+					this.player.sendQueue.addToSendQueue(new C0BPacketEntityAction(this.player, C0BPacketEntityAction.Action.RIDING_JUMP, (int)(this.player.getHorseJumpPower() * 100.0F)));
 				}
 				else if(!isJumping && this.player.movementInput.jump)
 				{

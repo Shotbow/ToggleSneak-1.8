@@ -12,7 +12,7 @@ public class ToggleSneakEvents
 {
 	public static ToggleSneakEvents instance = new ToggleSneakEvents();
 
-	protected static final Minecraft mc = Minecraft.getMinecraft();
+	private static final Minecraft mc = Minecraft.getMinecraft();
 	
 	@SubscribeEvent
 	public void GuiOpenEvent(GuiOpenEvent event)

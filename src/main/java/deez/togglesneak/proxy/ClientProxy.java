@@ -2,14 +2,10 @@ package deez.togglesneak.proxy;
 
 import api.player.client.ClientPlayerAPI;
 
+import deez.togglesneak.*;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import net.minecraftforge.common.MinecraftForge;
-
-import deez.togglesneak.PlayerBase;
-import deez.togglesneak.RenderTextToHUD;
-import deez.togglesneak.ToggleSneakEvents;
-import deez.togglesneak.ToggleSneakMod;
 
 public class ClientProxy extends CommonProxy
 {
@@ -23,7 +19,7 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void initMod()
 	{
-		RenderTextToHUD.SetHUDText(ToggleSneakMod.ModID + " for Forge - version " + ToggleSneakMod.ModVersion + " Beta!");
+		RenderTextToHUD.SetHUDText(References.MOD_ID + " for Forge - version " + References.MOD_VERSION + " Beta!");
 		ClientPlayerAPI.register("ToggleSneak", PlayerBase.class);
 	}
 }
