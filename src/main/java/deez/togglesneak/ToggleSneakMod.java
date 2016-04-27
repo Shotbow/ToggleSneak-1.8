@@ -1,20 +1,18 @@
 package deez.togglesneak;
 
-import deez.togglesneak.proxy.CommonProxy;
+import api.player.client.ClientPlayerAPI;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
 
 @Mod(modid = References.MOD_ID, name = References.MOD_NAME, version = References.MOD_VERSION,
-		guiFactory = References.GUI_FACTORY)
-
+		guiFactory = References.GUI_FACTORY, clientSideOnly = true)
 public class ToggleSneakMod {
 
     public static Configuration config = null;
@@ -32,21 +30,18 @@ public class ToggleSneakMod {
 
 	public static boolean wasSprintDisabled = false;
 
-	@Instance("ToggleSneak")
-	public static ToggleSneakMod instance;
-
-    @SidedProxy(clientSide = References.CLIENT_PROXY, serverSide = References.COMMON_PROXY)
-    public static CommonProxy proxy;
-
 	@EventHandler
 	public void onPreInit(FMLPreInitializationEvent event) {
 		updateConfig(event.getSuggestedConfigurationFile(), true);
-		proxy.registerEvents(event);
+
+        MinecraftForge.EVENT_BUS.register(RenderTextToHUD.instance);
+        MinecraftForge.EVENT_BUS.register(ToggleSneakEvents.instance);
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		proxy.initMod();
+        RenderTextToHUD.SetHUDText(References.MOD_ID + " for Forge - version " + References.MOD_VERSION + " Beta!");
+        ClientPlayerAPI.register(References.MOD_ID, PlayerBase.class);
 	}
 
 	public static void reloadConfig() {
