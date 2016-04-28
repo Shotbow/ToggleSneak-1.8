@@ -9,17 +9,20 @@ import net.minecraft.network.play.client.C0BPacketEntityAction;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.MovementInputFromOptions;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 
 public class PlayerBase extends ClientPlayerBase {
-	private Minecraft mc = Minecraft.getMinecraft();
-	private CustomMovementInput customMovementInput = new CustomMovementInput();
-	private GameSettings settings = mc.gameSettings;
+	private final Minecraft mc = Minecraft.getMinecraft();
+	private final CustomMovementInput customMovementInput = new CustomMovementInput();
+	private final GameSettings settings = mc.gameSettings;
+    private final FlySpeedRegulator flySpeedRegulator = new FlySpeedRegulator();
 
 //	private boolean showDebug = true;
 //	private boolean handledDebugPress = false;
 
 	public PlayerBase(ClientPlayerAPI api) {
 		super(api);
+        MinecraftForge.EVENT_BUS.register(flySpeedRegulator);
 	}
 
 	/*
@@ -215,15 +218,23 @@ public class PlayerBase extends ClientPlayerBase {
 		//
 		//  Fly Speed Boosting - Added 5/7/2014
 		//
-		if (ToggleSneakMod.optionEnableFlyBoost && this.player.capabilities.isFlying && this.settings.keyBindSprint.isKeyDown() && this.player.capabilities.isCreativeMode) {
-			this.player.capabilities.setFlySpeed(0.05F * (float) ToggleSneakMod.optionFlyBoostAmount);
+//		if (ToggleSneakMod.optionEnableFlyBoost && this.player.capabilities.isFlying && this.settings.keyBindSprint.isKeyDown() && this.player.capabilities.isCreativeMode) {
+//			this.player.capabilities.setFlySpeed(0.05F * (float) ToggleSneakMod.optionFlyBoostAmount);
+//
+//            if (this.player.movementInput.sneak) this.player.motionY -= 0.15D * ToggleSneakMod.optionFlyBoostAmount;
+//			if (this.player.movementInput.jump) this.player.motionY += 0.15D * ToggleSneakMod.optionFlyBoostAmount;
+//
+//		} else if (this.player.capabilities.getFlySpeed() != 0.05F) {
+//			this.player.capabilities.setFlySpeed(0.05F);
+//		}
+        if (ToggleSneakMod.optionEnableFlyBoost && this.player.capabilities.isFlying && this.settings.keyBindSprint.isKeyDown()) {
+            flySpeedRegulator.updateFlySpeed(0.05F * (float) ToggleSneakMod.optionFlyBoostAmount);
 
-			if (this.player.movementInput.sneak) this.player.motionY -= 0.15D * ToggleSneakMod.optionFlyBoostAmount;
-			if (this.player.movementInput.jump) this.player.motionY += 0.15D * ToggleSneakMod.optionFlyBoostAmount;
-
-		} else if (this.player.capabilities.getFlySpeed() != 0.05F) {
-			this.player.capabilities.setFlySpeed(0.05F);
-		}
+            if (this.player.movementInput.sneak) this.player.motionY -= 0.15D * ToggleSneakMod.optionFlyBoostAmount;
+            if (this.player.movementInput.jump) this.player.motionY += 0.15D * ToggleSneakMod.optionFlyBoostAmount;
+        } else if (player.capabilities.getFlySpeed() != 0.05F) {
+            flySpeedRegulator.updateFlySpeed(0.05F);
+        }
 
 
 		if (this.player.capabilities.allowFlying && !isJumping && this.player.movementInput.jump) {

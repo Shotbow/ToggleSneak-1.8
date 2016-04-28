@@ -4,6 +4,7 @@ import api.player.client.ClientPlayerAPI;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -30,18 +31,24 @@ public class ToggleSneakMod {
 
 	public static boolean wasSprintDisabled = false;
 
+    // TODO: 28-4-16 delete me
+    private TempKeyBind tempKeyBind = new TempKeyBind();
+
 	@EventHandler
 	public void onPreInit(FMLPreInitializationEvent event) {
 		updateConfig(event.getSuggestedConfigurationFile(), true);
 
         MinecraftForge.EVENT_BUS.register(RenderTextToHUD.instance);
         MinecraftForge.EVENT_BUS.register(ToggleSneakEvents.instance);
+        MinecraftForge.EVENT_BUS.register(tempKeyBind);
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
         RenderTextToHUD.SetHUDText(References.MOD_ID + " for Forge - version " + References.MOD_VERSION + " Beta!");
         ClientPlayerAPI.register(References.MOD_ID, PlayerBase.class);
+
+        ClientRegistry.registerKeyBinding(tempKeyBind.getKeyBinding());
 	}
 
 	public static void reloadConfig() {
