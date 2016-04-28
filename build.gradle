@@ -31,12 +31,6 @@ jar {
     manifest {
         attributes 'ModSide':'CLIENT'
     }
-
-    appendix = project.minecraft.version
-}
-
-sourceJar{
-    appendix = project.minecraft.version
 }
 
 processResources
