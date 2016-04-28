@@ -2,8 +2,10 @@ package deez.togglesneak;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.MovementInputFromOptions;
+import net.minecraft.world.WorldSettings;
 
 import java.text.DecimalFormat;
 
@@ -146,7 +148,10 @@ public class CustomMovementInput {
 
 			if (isFlying) {
 				DecimalFormat numFormat = new DecimalFormat("#.00");
-				if (ToggleSneakMod.optionEnableFlyBoost && isHoldingSprint)
+
+				final PlayerControllerMP playerController = Minecraft.getMinecraft().playerController;
+				if (ToggleSneakMod.optionEnableFlyBoost && isHoldingSprint && (playerController.isInCreativeMode()
+						|| playerController.getCurrentGameType().equals(WorldSettings.GameType.SPECTATOR)))
 					output += "[Flying (" + numFormat.format(ToggleSneakMod.optionFlyBoostAmount) + "x boost)]  ";
 				else output += "[Flying]  ";
 			}
