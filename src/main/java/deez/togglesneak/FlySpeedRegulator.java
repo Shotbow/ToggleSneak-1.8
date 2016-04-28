@@ -43,7 +43,7 @@ public class FlySpeedRegulator {
 
         if (canSetFlySpeed()) {
             lastClientFlySpeed = speed;
-            player.capabilities.setFlySpeed(speed);
+            setClientFlySpeed();
             speedModified = true;
         } else {
             lastClientFlySpeed = speed;
@@ -63,6 +63,14 @@ public class FlySpeedRegulator {
             }
             mc.mcProfiler.endStartSection(References.MOD_ID);
         }
+    }
+
+    private void setClientFlySpeed() {
+        final EntityPlayerSP player = mc.thePlayer;
+
+        if (player.movementInput.sneak) player.motionY -= 0.15D * ToggleSneakMod.optionFlyBoostAmount;
+        if (player.movementInput.jump) player.motionY += 0.15D * ToggleSneakMod.optionFlyBoostAmount;
+        player.capabilities.setFlySpeed(lastClientFlySpeed);
     }
 
     private void onGameModeChange(GameType oldGt, GameType newGt) {
