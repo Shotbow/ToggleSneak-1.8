@@ -249,14 +249,18 @@ public class PlayerBase extends ClientPlayerBase {
 			}
 		}
 
-		if (this.player.capabilities.isFlying) {
-			if (this.player.movementInput.sneak) {
-				this.player.motionY -= 0.15D;
-			}
-			if (this.player.movementInput.jump) {
-				this.player.motionY += 0.15D;
-			}
-		}
+        if (this.player.capabilities.isFlying && mc.getRenderViewEntity() == this.player)
+        {
+            if (this.player.movementInput.sneak)
+            {
+                this.player.motionY -= (double)(this.player.capabilities.getFlySpeed() * 3.0F);
+            }
+
+            if (this.player.movementInput.jump)
+            {
+                this.player.motionY += (double)(this.player.capabilities.getFlySpeed() * 3.0F);
+            }
+        }
 
 		if (this.player.isRidingHorse()) {
 			if (this.playerAPI.getHorseJumpPowerCounterField() < 0) {
