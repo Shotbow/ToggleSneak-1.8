@@ -229,9 +229,11 @@ public class PlayerBase extends ClientPlayerBase {
 //		}
         if (ToggleSneakMod.optionEnableFlyBoost && this.player.capabilities.isFlying && this.settings.keyBindSprint.isKeyDown()) {
             flySpeedRegulator.updateFlySpeed(0.05F * (float) ToggleSneakMod.optionFlyBoostAmount);
+            if (this.player.movementInput.sneak && flySpeedRegulator.canSetFlySpeed())
+                this.player.motionY -= 0.15D * ToggleSneakMod.optionFlyBoostAmount;
+            if (this.player.movementInput.jump && flySpeedRegulator.canSetFlySpeed())
+                this.player.motionY += 0.15D * ToggleSneakMod.optionFlyBoostAmount;
 
-            if (this.player.movementInput.sneak) this.player.motionY -= 0.15D * ToggleSneakMod.optionFlyBoostAmount;
-            if (this.player.movementInput.jump) this.player.motionY += 0.15D * ToggleSneakMod.optionFlyBoostAmount;
         } else if (player.capabilities.getFlySpeed() != 0.05F) {
             flySpeedRegulator.updateFlySpeed(0.05F);
         }

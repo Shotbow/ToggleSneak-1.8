@@ -83,7 +83,7 @@ public class FlySpeedRegulator {
      * are we currently allowed to have a modified fly speed
      * @return if we are allowed to modify our fly speed
      */
-    private boolean canSetFlySpeed() {
+    public boolean canSetFlySpeed() {
         GameType currentGameType = mc.playerController.getCurrentGameType();
         return currentGameType.equals(GameType.CREATIVE) || currentGameType.equals(GameType.SPECTATOR);
     }
