@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import java.io.File;
 
 @Mod(modid = References.MOD_ID, name = References.MOD_NAME, version = References.MOD_VERSION,
-		guiFactory = References.GUI_FACTORY, clientSideOnly = true)
+		guiFactory = References.GUI_FACTORY, clientSideOnly = true, acceptedMinecraftVersions = "[1.8,1.8.9]")
 public class ToggleSneakMod {
 
     public static Configuration config = null;
